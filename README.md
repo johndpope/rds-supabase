@@ -19,13 +19,15 @@ N.B. - the vanilla postgres db schema is 170kb
 I do some processing and end up with updated rds_schema.sql ~ 20kb
 so we lost a bunch of extensions / webhooks (pg_net dependent)  and stuff..
 
-# we import this diluted dump
+# IMPORT RDS SCHEMA
 ```shell
 psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres" -f postgres_users.sql
 psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres" -f rds_schema.sql
 psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres" -f data.sql
-
 ```
+
+# TODO - also need these for auth - this has a potential jwt replacement extension - not tested
+https://github.com/johndpope/rds-supabase/blob/main/docker/bootstrap_db.sh#L31
 
 
 clone these into auth + realtime repos into docker folder 
@@ -36,6 +38,8 @@ gh repo clone johndpope/auth
 gh repo clone johndpope/realtime
 docker-compose up
 ```
+
+
 
 
 ##  Format DB
