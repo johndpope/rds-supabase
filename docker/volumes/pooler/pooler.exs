@@ -8,7 +8,7 @@
 
 params = %{
   "external_id" => System.get_env("POOLER_TENANT_ID"),
-  "db_host" => System.get_env("DB_HOST", "mly-pg-live-prod.cz82q6siq69n.ap-southeast-2.rds.amazonaws.com"),  "db_port" => System.get_env("POSTGRES_PORT"),
+  "db_host" => System.get_env("DB_HOST", "your-rds-host.rds.amazonaws.com"),  "db_port" => System.get_env("POSTGRES_PORT"),
   "db_database" => System.get_env("POSTGRES_DB"),
   "require_user" => false,
   "auth_query" => "SELECT * FROM pgbouncer.get_auth($1)",
