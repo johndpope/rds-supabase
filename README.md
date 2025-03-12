@@ -28,13 +28,12 @@ psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POST
 ```
 
 
-clone these into this folder 
+clone these into auth + realtime repos into docker folder 
 
 ```shell
+cd docker
 gh repo clone johndpope/auth
 gh repo clone johndpope/realtime
-
-
 docker-compose up
 ```
 
