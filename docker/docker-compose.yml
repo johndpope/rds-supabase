@@ -211,10 +211,10 @@ services:
 # build the docker image here  -> https://github.com/Mailopoly/mly-supabase/actions/workflows/build_docker.yaml
   realtime:
     container_name: supabase-realtime
-    image: ${supabase_realtime_image_uri} # - this has a problem updating rds parameters - not even rds master credentials can do this -  https://github.com/supabase/supabase/issues/27153    message: "permission denied to set parameter \"log_min_messages\"",
-    # build:
-    #   context: ./realtime # wont build on ec2 machine with 4gb ram
-    #   dockerfile: Dockerfile
+    #image: ${supabase_realtime_image_uri} # - this has a problem updating rds parameters - not even rds master credentials can do this -  https://github.com/supabase/supabase/issues/27153    message: "permission denied to set parameter \"log_min_messages\"",
+    build:
+      context: ./realtime # wont build on ec2 machine with 4gb ram
+      dockerfile: Dockerfile
     restart: no
     ulimits:
       nofile:
