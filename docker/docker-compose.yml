@@ -3,9 +3,7 @@
 #   With helpers:       docker compose -f docker-compose.yml -f ./dev/docker-compose.dev.yml up
 #   Stop:               docker compose down
 #   Destroy:            docker compose -f docker-compose.yml -f ./dev/docker-compose.dev.yml down -v --remove-orphans
-#   Reset everything:  ./reset.sh
-#  the supabase ec2 box shows health of services on login with a MOTD - message of the day  -> live heres
-#  https://github.com/Mailopoly/deploy-apigateway-lambda/tree/main/infra/scripts/motd/supabase_motd.sh
+
 name: supabase
 
 services:
