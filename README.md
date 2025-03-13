@@ -8,6 +8,34 @@ Im not 100% flat on all the permissions/tables /triggers/extensions.
 PLEASE perform a snapshot - and instead of running format_db (breaks stuff) do a restore from point in time - (this depends on running the snapshot)
 
 
+
+
+use the rds_snapshot_manager.sh to create a clean restore point to roll back 
+```shell
+aws iam put-role-policy \
+  --role-name multi-user-ssh-access-role \
+  --policy-name RDSSnapshotAccess \
+  --policy-document '{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "rds:CreateDBSnapshot",
+          "rds:DeleteDBSnapshot",
+          "rds:DescribeDBSnapshots", 
+          "rds:DescribeDBInstances",
+          "rds:RestoreDBInstanceFromDBSnapshot"
+        ],
+        "Resource": "*"
+      }
+    ]
+  }'
+```
+
+
+
+
 the gist
 I boot up the supabase docker containers - this runs all the migration scripts succesfully across containers. I run an export 
 
