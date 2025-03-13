@@ -2,6 +2,11 @@
 WARNING - DO NOT USE THIS ON PRODUCTION DATABASE 
 there are scripts here that may break EVERYTHING
 
+![dothis](info.png)
+
+Im not 100% flat on all the permissions/tables /triggers/extensions.
+PLEASE perform a snapshot - and instead of running format_db (breaks stuff) do a restore from point in time - (this depends on running the snapshot)
+
 
 the gist
 I boot up the supabase docker containers - this runs all the migration scripts succesfully across containers. I run an export 
