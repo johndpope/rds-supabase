@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source /home/ec2-user/mly-supabase/docker/.env
-source /etc/profile.d/mly_env.sh # get the Postgres credentials
+# source /home/ec2-user/mly-supabase/docker/.env
+# source /etc/profile.d/mly_env.sh # get the Postgres credentials
 
 # Color codes for output
 RED='\033[0;31m'
