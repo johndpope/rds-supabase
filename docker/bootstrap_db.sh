@@ -1,6 +1,7 @@
 #!/bin/bash
 
-
+source /home/ec2-user/mly-supabase/docker/.env
+source /etc/profile.d/mly_env.sh # get the Postgres credentials
 
 # Color codes for output
 RED='\033[0;31m'
@@ -27,7 +28,7 @@ EXTENSIONS=(
 
 # Array of initial setup scripts
 SETUP_SCRIPTS=(
-    # "./volumes/db/auth_schema_setup.sql" - use rds bootstrap
+    "./volumes/db/auth_schema_setup.sql" 
     "./volumes/db/_aws_pgjwt.sql"
     "./volumes/db/_supabase.sql"
     "./volumes/db/realtime.sql"
@@ -128,3 +129,14 @@ main() {
 
 # Call the main function
 main
+
+
+echo "Skipping migration skips that break stuff with missing extentions" | tee -a /var/log/clone_mly_supabase.log
+psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres" -f postgres_users.sql | tee -a /var/log/clone_mly_supabase.log
+psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres" -f rds_schema.sql  | tee -a /var/log/clone_mly_supabase.log
+psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres" -f data.sql  | tee -a /var/log/clone_mly_supabase.log
+
+
+# HOTFIX
+psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres" -c "GRANT USAGE, CREATE ON SCHEMA public TO supabase_admin;"
+psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres"  -c "ALTER PUBLICATION supabase_realtime OWNER TO supabase_admin;"
