@@ -55,7 +55,7 @@ so we lost a bunch of extensions / webhooks (pg_net dependent)  and stuff..
 # IMPORT RDS SCHEMA
 
 
-## replace mlypg_admin -> to your master rds_admin / aws account 
+## replace your_rds_admin -> to your master rds_admin / aws account 
 ```shell
 psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres" -f postgres_users.sql
 psql "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/postgres" -f rds_schema.sql
