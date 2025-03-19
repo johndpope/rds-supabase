@@ -45,7 +45,7 @@ ALTER SCHEMA auth OWNER TO supabase_admin;
 CREATE SCHEMA extensions;
 
 
-ALTER SCHEMA extensions OWNER TO your_rds_admin;
+ALTER SCHEMA extensions OWNER TO supabase_admin;
 
 --
 -- Name: graphql; Type: SCHEMA; Schema: -; Owner: supabase_admin
@@ -477,28 +477,28 @@ BEGIN
     WHERE ext.extname = 'pg_cron'
   )
   THEN
-    grant usage on schema cron TO your_rds_admin with grant option;
+    grant usage on schema cron TO supabase_admin with grant option;
 
-    alter default privileges in schema cron grant all on tables TO your_rds_admin with grant option;
-    alter default privileges in schema cron grant all on functions TO your_rds_admin with grant option;
-    alter default privileges in schema cron grant all on sequences TO your_rds_admin with grant option;
+    alter default privileges in schema cron grant all on tables TO supabase_admin with grant option;
+    alter default privileges in schema cron grant all on functions TO supabase_admin with grant option;
+    alter default privileges in schema cron grant all on sequences TO supabase_admin with grant option;
 
     alter default privileges for user supabase_admin in schema cron grant all
-        on sequences TO your_rds_admin with grant option;
+        on sequences TO supabase_admin with grant option;
     alter default privileges for user supabase_admin in schema cron grant all
-        on tables TO your_rds_admin with grant option;
+        on tables TO supabase_admin with grant option;
     alter default privileges for user supabase_admin in schema cron grant all
-        on functions TO your_rds_admin with grant option;
+        on functions TO supabase_admin with grant option;
 
-    grant all privileges on all tables in schema cron TO your_rds_admin with grant option;
+    grant all privileges on all tables in schema cron TO supabase_admin with grant option;
     revoke all on table cron.job from postgres;
-    grant select on table cron.job TO your_rds_admin with grant option;
+    grant select on table cron.job TO supabase_admin with grant option;
   END IF;
 END;
 $$;
 
 
-ALTER FUNCTION extensions.grant_pg_cron_access() OWNER TO your_rds_admin;
+ALTER FUNCTION extensions.grant_pg_cron_access() OWNER TO supabase_admin;
 
 --
 -- Name: FUNCTION grant_pg_cron_access(); Type: COMMENT; Schema: extensions; Owner: postgres
@@ -548,17 +548,17 @@ BEGIN
         -- This hook executes when `graphql.resolve` is created. That is not necessarily the last
         -- function in the extension so we need to grant permissions on existing entities AND
         -- update default permissions to any others that are created after `graphql.resolve`
-        grant usage on schema graphql TO your_rds_admin, anon, authenticated, service_role;
-        grant select on all tables in schema graphql TO your_rds_admin, anon, authenticated, service_role;
-        grant execute on all functions in schema graphql TO your_rds_admin, anon, authenticated, service_role;
-        grant all on all sequences in schema graphql TO your_rds_admin, anon, authenticated, service_role;
-        alter default privileges in schema graphql grant all on tables TO your_rds_admin, anon, authenticated, service_role;
-        alter default privileges in schema graphql grant all on functions TO your_rds_admin, anon, authenticated, service_role;
-        alter default privileges in schema graphql grant all on sequences TO your_rds_admin, anon, authenticated, service_role;
+        grant usage on schema graphql TO supabase_admin, anon, authenticated, service_role;
+        grant select on all tables in schema graphql TO supabase_admin, anon, authenticated, service_role;
+        grant execute on all functions in schema graphql TO supabase_admin, anon, authenticated, service_role;
+        grant all on all sequences in schema graphql TO supabase_admin, anon, authenticated, service_role;
+        alter default privileges in schema graphql grant all on tables TO supabase_admin, anon, authenticated, service_role;
+        alter default privileges in schema graphql grant all on functions TO supabase_admin, anon, authenticated, service_role;
+        alter default privileges in schema graphql grant all on sequences TO supabase_admin, anon, authenticated, service_role;
 
         -- Allow postgres role to allow granting usage on graphql and graphql_public schemas to custom roles
-        grant usage on schema graphql_public TO your_rds_admin with grant option;
-        grant usage on schema graphql TO your_rds_admin with grant option;
+        grant usage on schema graphql_public TO supabase_admin with grant option;
+        grant usage on schema graphql TO supabase_admin with grant option;
     END IF;
 
 END;
@@ -625,7 +625,7 @@ END;
 $$;
 
 
-ALTER FUNCTION extensions.grant_pg_net_access() OWNER TO your_rds_admin;
+ALTER FUNCTION extensions.grant_pg_net_access() OWNER TO supabase_admin;
 
 --
 -- Name: FUNCTION grant_pg_net_access(); Type: COMMENT; Schema: extensions; Owner: postgres
@@ -785,7 +785,7 @@ END;
 $$;
 
 
-ALTER FUNCTION pgbouncer.get_auth(p_usename text) OWNER TO your_rds_admin;
+ALTER FUNCTION pgbouncer.get_auth(p_usename text) OWNER TO supabase_admin;
 
 --
 -- Name: apply_rls(jsonb, integer); Type: FUNCTION; Schema: realtime; Owner: supabase_admin
@@ -4043,7 +4043,7 @@ ALTER TABLE storage.s3_multipart_uploads_parts ENABLE ROW LEVEL SECURITY;
 CREATE PUBLICATION supabase_realtime WITH (publish = 'insert, update, delete, truncate');
 
 
-ALTER PUBLICATION supabase_realtime OWNER TO your_rds_admin;
+ALTER PUBLICATION supabase_realtime OWNER TO supabase_admin;
 
 --
 -- Name: SCHEMA auth; Type: ACL; Schema: -; Owner: supabase_admin
@@ -4054,7 +4054,7 @@ GRANT USAGE ON SCHEMA auth TO authenticated;
 GRANT USAGE ON SCHEMA auth TO service_role;
 GRANT ALL ON SCHEMA auth TO supabase_auth_admin;
 GRANT ALL ON SCHEMA auth TO dashboard_user;
-GRANT ALL ON SCHEMA auth TO your_rds_admin;
+GRANT ALL ON SCHEMA auth TO supabase_admin;
 
 
 --
@@ -4072,7 +4072,7 @@ GRANT ALL ON SCHEMA extensions TO dashboard_user;
 --
 
 GRANT USAGE ON SCHEMA net TO supabase_functions_admin;
-GRANT USAGE ON SCHEMA net TO your_rds_admin;
+GRANT USAGE ON SCHEMA net TO supabase_admin;
 GRANT USAGE ON SCHEMA net TO anon;
 GRANT USAGE ON SCHEMA net TO authenticated;
 GRANT USAGE ON SCHEMA net TO service_role;
@@ -4082,7 +4082,7 @@ GRANT USAGE ON SCHEMA net TO service_role;
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
 --
 
-GRANT USAGE ON SCHEMA public TO your_rds_admin;
+GRANT USAGE ON SCHEMA public TO supabase_admin;
 GRANT USAGE ON SCHEMA public TO anon;
 GRANT USAGE ON SCHEMA public TO authenticated;
 GRANT USAGE ON SCHEMA public TO service_role;
@@ -4092,7 +4092,7 @@ GRANT USAGE ON SCHEMA public TO service_role;
 -- Name: SCHEMA realtime; Type: ACL; Schema: -; Owner: supabase_admin
 --
 
-GRANT USAGE ON SCHEMA realtime TO your_rds_admin;
+GRANT USAGE ON SCHEMA realtime TO supabase_admin;
 GRANT USAGE ON SCHEMA realtime TO anon;
 GRANT USAGE ON SCHEMA realtime TO authenticated;
 GRANT USAGE ON SCHEMA realtime TO service_role;
@@ -4103,7 +4103,7 @@ GRANT ALL ON SCHEMA realtime TO supabase_realtime_admin;
 -- Name: SCHEMA storage; Type: ACL; Schema: -; Owner: supabase_admin
 --
 
-GRANT ALL ON SCHEMA storage TO your_rds_admin;
+GRANT ALL ON SCHEMA storage TO supabase_admin;
 GRANT USAGE ON SCHEMA storage TO anon;
 GRANT USAGE ON SCHEMA storage TO authenticated;
 GRANT USAGE ON SCHEMA storage TO service_role;
@@ -4115,7 +4115,7 @@ GRANT ALL ON SCHEMA storage TO dashboard_user;
 -- Name: SCHEMA supabase_functions; Type: ACL; Schema: -; Owner: supabase_admin
 --
 
-GRANT USAGE ON SCHEMA supabase_functions TO your_rds_admin;
+GRANT USAGE ON SCHEMA supabase_functions TO supabase_admin;
 GRANT USAGE ON SCHEMA supabase_functions TO anon;
 GRANT USAGE ON SCHEMA supabase_functions TO authenticated;
 GRANT USAGE ON SCHEMA supabase_functions TO service_role;
@@ -4133,7 +4133,7 @@ GRANT ALL ON FUNCTION auth.email() TO dashboard_user;
 -- Name: FUNCTION jwt(); Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT ALL ON FUNCTION auth.jwt() TO your_rds_admin;
+GRANT ALL ON FUNCTION auth.jwt() TO supabase_admin;
 GRANT ALL ON FUNCTION auth.jwt() TO dashboard_user;
 
 
@@ -4156,7 +4156,7 @@ GRANT ALL ON FUNCTION auth.uid() TO dashboard_user;
 --
 
 GRANT ALL ON FUNCTION extensions.algorithm_sign(signables text, secret text, algorithm text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.algorithm_sign(signables text, secret text, algorithm text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.algorithm_sign(signables text, secret text, algorithm text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4164,7 +4164,7 @@ GRANT ALL ON FUNCTION extensions.algorithm_sign(signables text, secret text, alg
 --
 
 GRANT ALL ON FUNCTION extensions.armor(bytea) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.armor(bytea) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.armor(bytea) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4172,7 +4172,7 @@ GRANT ALL ON FUNCTION extensions.armor(bytea) TO your_rds_admin WITH GRANT OPTIO
 --
 
 GRANT ALL ON FUNCTION extensions.armor(bytea, text[], text[]) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.armor(bytea, text[], text[]) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.armor(bytea, text[], text[]) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4180,7 +4180,7 @@ GRANT ALL ON FUNCTION extensions.armor(bytea, text[], text[]) TO your_rds_admin 
 --
 
 GRANT ALL ON FUNCTION extensions.crypt(text, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.crypt(text, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.crypt(text, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4188,7 +4188,7 @@ GRANT ALL ON FUNCTION extensions.crypt(text, text) TO your_rds_admin WITH GRANT 
 --
 
 GRANT ALL ON FUNCTION extensions.dearmor(text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.dearmor(text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.dearmor(text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4196,7 +4196,7 @@ GRANT ALL ON FUNCTION extensions.dearmor(text) TO your_rds_admin WITH GRANT OPTI
 --
 
 GRANT ALL ON FUNCTION extensions.decrypt(bytea, bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.decrypt(bytea, bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.decrypt(bytea, bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4204,7 +4204,7 @@ GRANT ALL ON FUNCTION extensions.decrypt(bytea, bytea, text) TO your_rds_admin W
 --
 
 GRANT ALL ON FUNCTION extensions.decrypt_iv(bytea, bytea, bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.decrypt_iv(bytea, bytea, bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.decrypt_iv(bytea, bytea, bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4212,7 +4212,7 @@ GRANT ALL ON FUNCTION extensions.decrypt_iv(bytea, bytea, bytea, text) TO your_r
 --
 
 GRANT ALL ON FUNCTION extensions.digest(bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.digest(bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.digest(bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4220,7 +4220,7 @@ GRANT ALL ON FUNCTION extensions.digest(bytea, text) TO your_rds_admin WITH GRAN
 --
 
 GRANT ALL ON FUNCTION extensions.digest(text, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.digest(text, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.digest(text, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4228,7 +4228,7 @@ GRANT ALL ON FUNCTION extensions.digest(text, text) TO your_rds_admin WITH GRANT
 --
 
 GRANT ALL ON FUNCTION extensions.encrypt(bytea, bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.encrypt(bytea, bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.encrypt(bytea, bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4236,7 +4236,7 @@ GRANT ALL ON FUNCTION extensions.encrypt(bytea, bytea, text) TO your_rds_admin W
 --
 
 GRANT ALL ON FUNCTION extensions.encrypt_iv(bytea, bytea, bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.encrypt_iv(bytea, bytea, bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.encrypt_iv(bytea, bytea, bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4244,7 +4244,7 @@ GRANT ALL ON FUNCTION extensions.encrypt_iv(bytea, bytea, bytea, text) TO your_r
 --
 
 GRANT ALL ON FUNCTION extensions.gen_random_bytes(integer) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.gen_random_bytes(integer) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.gen_random_bytes(integer) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4252,7 +4252,7 @@ GRANT ALL ON FUNCTION extensions.gen_random_bytes(integer) TO your_rds_admin WIT
 --
 
 GRANT ALL ON FUNCTION extensions.gen_random_uuid() TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.gen_random_uuid() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.gen_random_uuid() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4260,7 +4260,7 @@ GRANT ALL ON FUNCTION extensions.gen_random_uuid() TO your_rds_admin WITH GRANT 
 --
 
 GRANT ALL ON FUNCTION extensions.gen_salt(text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.gen_salt(text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.gen_salt(text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4268,7 +4268,7 @@ GRANT ALL ON FUNCTION extensions.gen_salt(text) TO your_rds_admin WITH GRANT OPT
 --
 
 GRANT ALL ON FUNCTION extensions.gen_salt(text, integer) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.gen_salt(text, integer) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.gen_salt(text, integer) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4276,7 +4276,7 @@ GRANT ALL ON FUNCTION extensions.gen_salt(text, integer) TO your_rds_admin WITH 
 --
 
 REVOKE ALL ON FUNCTION extensions.grant_pg_cron_access() FROM postgres;
-GRANT ALL ON FUNCTION extensions.grant_pg_cron_access() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.grant_pg_cron_access() TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON FUNCTION extensions.grant_pg_cron_access() TO dashboard_user;
 
 
@@ -4284,7 +4284,7 @@ GRANT ALL ON FUNCTION extensions.grant_pg_cron_access() TO dashboard_user;
 -- Name: FUNCTION grant_pg_graphql_access(); Type: ACL; Schema: extensions; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION extensions.grant_pg_graphql_access() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.grant_pg_graphql_access() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4292,7 +4292,7 @@ GRANT ALL ON FUNCTION extensions.grant_pg_graphql_access() TO your_rds_admin WIT
 --
 
 REVOKE ALL ON FUNCTION extensions.grant_pg_net_access() FROM postgres;
-GRANT ALL ON FUNCTION extensions.grant_pg_net_access() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.grant_pg_net_access() TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON FUNCTION extensions.grant_pg_net_access() TO dashboard_user;
 
 
@@ -4301,7 +4301,7 @@ GRANT ALL ON FUNCTION extensions.grant_pg_net_access() TO dashboard_user;
 --
 
 GRANT ALL ON FUNCTION extensions.hmac(bytea, bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.hmac(bytea, bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.hmac(bytea, bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4309,28 +4309,28 @@ GRANT ALL ON FUNCTION extensions.hmac(bytea, bytea, text) TO your_rds_admin WITH
 --
 
 GRANT ALL ON FUNCTION extensions.hmac(text, text, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.hmac(text, text, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.hmac(text, text, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: FUNCTION pg_stat_statements(showtext boolean, OUT userid oid, OUT dbid oid, OUT toplevel boolean, OUT queryid bigint, OUT query text, OUT plans bigint, OUT total_plan_time double precision, OUT min_plan_time double precision, OUT max_plan_time double precision, OUT mean_plan_time double precision, OUT stddev_plan_time double precision, OUT calls bigint, OUT total_exec_time double precision, OUT min_exec_time double precision, OUT max_exec_time double precision, OUT mean_exec_time double precision, OUT stddev_exec_time double precision, OUT rows bigint, OUT shared_blks_hit bigint, OUT shared_blks_read bigint, OUT shared_blks_dirtied bigint, OUT shared_blks_written bigint, OUT local_blks_hit bigint, OUT local_blks_read bigint, OUT local_blks_dirtied bigint, OUT local_blks_written bigint, OUT temp_blks_read bigint, OUT temp_blks_written bigint, OUT blk_read_time double precision, OUT blk_write_time double precision, OUT temp_blk_read_time double precision, OUT temp_blk_write_time double precision, OUT wal_records bigint, OUT wal_fpi bigint, OUT wal_bytes numeric, OUT jit_functions bigint, OUT jit_generation_time double precision, OUT jit_inlining_count bigint, OUT jit_inlining_time double precision, OUT jit_optimization_count bigint, OUT jit_optimization_time double precision, OUT jit_emission_count bigint, OUT jit_emission_time double precision); Type: ACL; Schema: extensions; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION extensions.pg_stat_statements(showtext boolean, OUT userid oid, OUT dbid oid, OUT toplevel boolean, OUT queryid bigint, OUT query text, OUT plans bigint, OUT total_plan_time double precision, OUT min_plan_time double precision, OUT max_plan_time double precision, OUT mean_plan_time double precision, OUT stddev_plan_time double precision, OUT calls bigint, OUT total_exec_time double precision, OUT min_exec_time double precision, OUT max_exec_time double precision, OUT mean_exec_time double precision, OUT stddev_exec_time double precision, OUT rows bigint, OUT shared_blks_hit bigint, OUT shared_blks_read bigint, OUT shared_blks_dirtied bigint, OUT shared_blks_written bigint, OUT local_blks_hit bigint, OUT local_blks_read bigint, OUT local_blks_dirtied bigint, OUT local_blks_written bigint, OUT temp_blks_read bigint, OUT temp_blks_written bigint, OUT blk_read_time double precision, OUT blk_write_time double precision, OUT temp_blk_read_time double precision, OUT temp_blk_write_time double precision, OUT wal_records bigint, OUT wal_fpi bigint, OUT wal_bytes numeric, OUT jit_functions bigint, OUT jit_generation_time double precision, OUT jit_inlining_count bigint, OUT jit_inlining_time double precision, OUT jit_optimization_count bigint, OUT jit_optimization_time double precision, OUT jit_emission_count bigint, OUT jit_emission_time double precision) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pg_stat_statements(showtext boolean, OUT userid oid, OUT dbid oid, OUT toplevel boolean, OUT queryid bigint, OUT query text, OUT plans bigint, OUT total_plan_time double precision, OUT min_plan_time double precision, OUT max_plan_time double precision, OUT mean_plan_time double precision, OUT stddev_plan_time double precision, OUT calls bigint, OUT total_exec_time double precision, OUT min_exec_time double precision, OUT max_exec_time double precision, OUT mean_exec_time double precision, OUT stddev_exec_time double precision, OUT rows bigint, OUT shared_blks_hit bigint, OUT shared_blks_read bigint, OUT shared_blks_dirtied bigint, OUT shared_blks_written bigint, OUT local_blks_hit bigint, OUT local_blks_read bigint, OUT local_blks_dirtied bigint, OUT local_blks_written bigint, OUT temp_blks_read bigint, OUT temp_blks_written bigint, OUT blk_read_time double precision, OUT blk_write_time double precision, OUT temp_blk_read_time double precision, OUT temp_blk_write_time double precision, OUT wal_records bigint, OUT wal_fpi bigint, OUT wal_bytes numeric, OUT jit_functions bigint, OUT jit_generation_time double precision, OUT jit_inlining_count bigint, OUT jit_inlining_time double precision, OUT jit_optimization_count bigint, OUT jit_optimization_time double precision, OUT jit_emission_count bigint, OUT jit_emission_time double precision) TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: FUNCTION pg_stat_statements_info(OUT dealloc bigint, OUT stats_reset timestamp with time zone); Type: ACL; Schema: extensions; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION extensions.pg_stat_statements_info(OUT dealloc bigint, OUT stats_reset timestamp with time zone) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pg_stat_statements_info(OUT dealloc bigint, OUT stats_reset timestamp with time zone) TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: FUNCTION pg_stat_statements_reset(userid oid, dbid oid, queryid bigint); Type: ACL; Schema: extensions; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION extensions.pg_stat_statements_reset(userid oid, dbid oid, queryid bigint) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pg_stat_statements_reset(userid oid, dbid oid, queryid bigint) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4338,7 +4338,7 @@ GRANT ALL ON FUNCTION extensions.pg_stat_statements_reset(userid oid, dbid oid, 
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_armor_headers(text, OUT key text, OUT value text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_armor_headers(text, OUT key text, OUT value text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_armor_headers(text, OUT key text, OUT value text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4346,7 +4346,7 @@ GRANT ALL ON FUNCTION extensions.pgp_armor_headers(text, OUT key text, OUT value
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_key_id(bytea) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_key_id(bytea) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_key_id(bytea) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4354,7 +4354,7 @@ GRANT ALL ON FUNCTION extensions.pgp_key_id(bytea) TO your_rds_admin WITH GRANT 
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4362,7 +4362,7 @@ GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea) TO your_rds_admin
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4370,7 +4370,7 @@ GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text) TO your_rds
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4378,7 +4378,7 @@ GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt(bytea, bytea, text, text) TO yo
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4386,7 +4386,7 @@ GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea) TO your_rds
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4394,7 +4394,7 @@ GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text) TO yo
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4402,7 +4402,7 @@ GRANT ALL ON FUNCTION extensions.pgp_pub_decrypt_bytea(bytea, bytea, text, text)
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4410,7 +4410,7 @@ GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea) TO your_rds_admin 
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4418,7 +4418,7 @@ GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt(text, bytea, text) TO your_rds_
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4426,7 +4426,7 @@ GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea) TO your_rds
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4434,7 +4434,7 @@ GRANT ALL ON FUNCTION extensions.pgp_pub_encrypt_bytea(bytea, bytea, text) TO yo
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4442,7 +4442,7 @@ GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text) TO your_rds_admin 
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4450,7 +4450,7 @@ GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt(bytea, text, text) TO your_rds_
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4458,7 +4458,7 @@ GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text) TO your_rds_
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4466,7 +4466,7 @@ GRANT ALL ON FUNCTION extensions.pgp_sym_decrypt_bytea(bytea, text, text) TO you
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4474,7 +4474,7 @@ GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text) TO your_rds_admin W
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4482,7 +4482,7 @@ GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt(text, text, text) TO your_rds_a
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4490,28 +4490,28 @@ GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text) TO your_rds_
 --
 
 GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text, text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text, text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgp_sym_encrypt_bytea(bytea, text, text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: FUNCTION pgrst_ddl_watch(); Type: ACL; Schema: extensions; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION extensions.pgrst_ddl_watch() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgrst_ddl_watch() TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: FUNCTION pgrst_drop_watch(); Type: ACL; Schema: extensions; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION extensions.pgrst_drop_watch() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.pgrst_drop_watch() TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: FUNCTION set_graphql_placeholder(); Type: ACL; Schema: extensions; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION extensions.set_graphql_placeholder() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.set_graphql_placeholder() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4519,7 +4519,7 @@ GRANT ALL ON FUNCTION extensions.set_graphql_placeholder() TO your_rds_admin WIT
 --
 
 GRANT ALL ON FUNCTION extensions.sign(payload json, secret text, algorithm text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.sign(payload json, secret text, algorithm text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.sign(payload json, secret text, algorithm text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4527,7 +4527,7 @@ GRANT ALL ON FUNCTION extensions.sign(payload json, secret text, algorithm text)
 --
 
 GRANT ALL ON FUNCTION extensions.try_cast_double(inp text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.try_cast_double(inp text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.try_cast_double(inp text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4535,7 +4535,7 @@ GRANT ALL ON FUNCTION extensions.try_cast_double(inp text) TO your_rds_admin WIT
 --
 
 GRANT ALL ON FUNCTION extensions.url_decode(data text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.url_decode(data text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.url_decode(data text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4543,7 +4543,7 @@ GRANT ALL ON FUNCTION extensions.url_decode(data text) TO your_rds_admin WITH GR
 --
 
 GRANT ALL ON FUNCTION extensions.url_encode(data bytea) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.url_encode(data bytea) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.url_encode(data bytea) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4551,7 +4551,7 @@ GRANT ALL ON FUNCTION extensions.url_encode(data bytea) TO your_rds_admin WITH G
 --
 
 GRANT ALL ON FUNCTION extensions.uuid_generate_v1() TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.uuid_generate_v1() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v1() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4559,7 +4559,7 @@ GRANT ALL ON FUNCTION extensions.uuid_generate_v1() TO your_rds_admin WITH GRANT
 --
 
 GRANT ALL ON FUNCTION extensions.uuid_generate_v1mc() TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.uuid_generate_v1mc() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v1mc() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4567,7 +4567,7 @@ GRANT ALL ON FUNCTION extensions.uuid_generate_v1mc() TO your_rds_admin WITH GRA
 --
 
 GRANT ALL ON FUNCTION extensions.uuid_generate_v3(namespace uuid, name text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.uuid_generate_v3(namespace uuid, name text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v3(namespace uuid, name text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4575,7 +4575,7 @@ GRANT ALL ON FUNCTION extensions.uuid_generate_v3(namespace uuid, name text) TO 
 --
 
 GRANT ALL ON FUNCTION extensions.uuid_generate_v4() TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.uuid_generate_v4() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v4() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4583,7 +4583,7 @@ GRANT ALL ON FUNCTION extensions.uuid_generate_v4() TO your_rds_admin WITH GRANT
 --
 
 GRANT ALL ON FUNCTION extensions.uuid_generate_v5(namespace uuid, name text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.uuid_generate_v5(namespace uuid, name text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.uuid_generate_v5(namespace uuid, name text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4591,7 +4591,7 @@ GRANT ALL ON FUNCTION extensions.uuid_generate_v5(namespace uuid, name text) TO 
 --
 
 GRANT ALL ON FUNCTION extensions.uuid_nil() TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.uuid_nil() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.uuid_nil() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4599,7 +4599,7 @@ GRANT ALL ON FUNCTION extensions.uuid_nil() TO your_rds_admin WITH GRANT OPTION;
 --
 
 GRANT ALL ON FUNCTION extensions.uuid_ns_dns() TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.uuid_ns_dns() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.uuid_ns_dns() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4607,7 +4607,7 @@ GRANT ALL ON FUNCTION extensions.uuid_ns_dns() TO your_rds_admin WITH GRANT OPTI
 --
 
 GRANT ALL ON FUNCTION extensions.uuid_ns_oid() TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.uuid_ns_oid() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.uuid_ns_oid() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4615,7 +4615,7 @@ GRANT ALL ON FUNCTION extensions.uuid_ns_oid() TO your_rds_admin WITH GRANT OPTI
 --
 
 GRANT ALL ON FUNCTION extensions.uuid_ns_url() TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.uuid_ns_url() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.uuid_ns_url() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4623,7 +4623,7 @@ GRANT ALL ON FUNCTION extensions.uuid_ns_url() TO your_rds_admin WITH GRANT OPTI
 --
 
 GRANT ALL ON FUNCTION extensions.uuid_ns_x500() TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.uuid_ns_x500() TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.uuid_ns_x500() TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4631,14 +4631,14 @@ GRANT ALL ON FUNCTION extensions.uuid_ns_x500() TO your_rds_admin WITH GRANT OPT
 --
 
 GRANT ALL ON FUNCTION extensions.verify(token text, secret text, algorithm text) TO dashboard_user;
-GRANT ALL ON FUNCTION extensions.verify(token text, secret text, algorithm text) TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON FUNCTION extensions.verify(token text, secret text, algorithm text) TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: FUNCTION graphql("operationName" text, query text, variables jsonb, extensions jsonb); Type: ACL; Schema: graphql_public; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO your_rds_admin;
+GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO supabase_admin;
 GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO anon;
 GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO authenticated;
 GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO service_role;
@@ -4677,7 +4677,7 @@ GRANT ALL ON FUNCTION pgsodium.crypto_aead_det_keygen() TO service_role;
 -- Name: FUNCTION apply_rls(wal jsonb, max_record_bytes integer); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO dashboard_user;
 GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO anon;
 GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO authenticated;
@@ -4689,7 +4689,7 @@ GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO
 -- Name: FUNCTION broadcast_changes(topic_name text, event_name text, operation text, table_name text, table_schema text, new record, old record, level text); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime.broadcast_changes(topic_name text, event_name text, operation text, table_name text, table_schema text, new record, old record, level text) TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.broadcast_changes(topic_name text, event_name text, operation text, table_name text, table_schema text, new record, old record, level text) TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.broadcast_changes(topic_name text, event_name text, operation text, table_name text, table_schema text, new record, old record, level text) TO dashboard_user;
 
 
@@ -4697,7 +4697,7 @@ GRANT ALL ON FUNCTION realtime.broadcast_changes(topic_name text, event_name tex
 -- Name: FUNCTION build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO dashboard_user;
 GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO anon;
 GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO authenticated;
@@ -4709,7 +4709,7 @@ GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_n
 -- Name: FUNCTION "cast"(val text, type_ regtype); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO supabase_admin;
 GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO dashboard_user;
 GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO anon;
 GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO authenticated;
@@ -4721,7 +4721,7 @@ GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO supabase_realt
 -- Name: FUNCTION check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO dashboard_user;
 GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO anon;
 GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO authenticated;
@@ -4733,7 +4733,7 @@ GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ 
 -- Name: FUNCTION is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO dashboard_user;
 GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO anon;
 GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO authenticated;
@@ -4745,7 +4745,7 @@ GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_c
 -- Name: FUNCTION list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO dashboard_user;
 GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO anon;
 GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO authenticated;
@@ -4757,7 +4757,7 @@ GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, ma
 -- Name: FUNCTION quote_wal2json(entity regclass); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO dashboard_user;
 GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO anon;
 GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO authenticated;
@@ -4769,7 +4769,7 @@ GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO supabase_realt
 -- Name: FUNCTION send(payload jsonb, event text, topic text, private boolean); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime.send(payload jsonb, event text, topic text, private boolean) TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.send(payload jsonb, event text, topic text, private boolean) TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.send(payload jsonb, event text, topic text, private boolean) TO dashboard_user;
 
 
@@ -4777,7 +4777,7 @@ GRANT ALL ON FUNCTION realtime.send(payload jsonb, event text, topic text, priva
 -- Name: FUNCTION subscription_check_filters(); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO dashboard_user;
 GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO anon;
 GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO authenticated;
@@ -4789,7 +4789,7 @@ GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO supabase_realtime
 -- Name: FUNCTION to_regrole(role_name text); Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO dashboard_user;
 GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO anon;
 GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO authenticated;
@@ -4801,7 +4801,7 @@ GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO supabase_realtime_a
 -- Name: FUNCTION topic(); Type: ACL; Schema: realtime; Owner: supabase_realtime_admin
 --
 
-GRANT ALL ON FUNCTION realtime.topic() TO your_rds_admin;
+GRANT ALL ON FUNCTION realtime.topic() TO supabase_admin;
 GRANT ALL ON FUNCTION realtime.topic() TO dashboard_user;
 
 
@@ -4813,7 +4813,7 @@ REVOKE ALL ON FUNCTION supabase_functions.http_request() FROM PUBLIC;
 GRANT ALL ON FUNCTION supabase_functions.http_request() TO anon;
 GRANT ALL ON FUNCTION supabase_functions.http_request() TO authenticated;
 GRANT ALL ON FUNCTION supabase_functions.http_request() TO service_role;
-GRANT ALL ON FUNCTION supabase_functions.http_request() TO your_rds_admin;
+GRANT ALL ON FUNCTION supabase_functions.http_request() TO supabase_admin;
 
 
 --
@@ -4821,16 +4821,16 @@ GRANT ALL ON FUNCTION supabase_functions.http_request() TO your_rds_admin;
 --
 
 GRANT ALL ON TABLE auth.audit_log_entries TO dashboard_user;
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.audit_log_entries TO your_rds_admin;
-GRANT SELECT ON TABLE auth.audit_log_entries TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.audit_log_entries TO supabase_admin;
+GRANT SELECT ON TABLE auth.audit_log_entries TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: TABLE flow_state; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.flow_state TO your_rds_admin;
-GRANT SELECT ON TABLE auth.flow_state TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.flow_state TO supabase_admin;
+GRANT SELECT ON TABLE auth.flow_state TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.flow_state TO dashboard_user;
 
 
@@ -4838,8 +4838,8 @@ GRANT ALL ON TABLE auth.flow_state TO dashboard_user;
 -- Name: TABLE identities; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.identities TO your_rds_admin;
-GRANT SELECT ON TABLE auth.identities TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.identities TO supabase_admin;
+GRANT SELECT ON TABLE auth.identities TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.identities TO dashboard_user;
 
 
@@ -4848,16 +4848,16 @@ GRANT ALL ON TABLE auth.identities TO dashboard_user;
 --
 
 GRANT ALL ON TABLE auth.instances TO dashboard_user;
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.instances TO your_rds_admin;
-GRANT SELECT ON TABLE auth.instances TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.instances TO supabase_admin;
+GRANT SELECT ON TABLE auth.instances TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: TABLE mfa_amr_claims; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.mfa_amr_claims TO your_rds_admin;
-GRANT SELECT ON TABLE auth.mfa_amr_claims TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.mfa_amr_claims TO supabase_admin;
+GRANT SELECT ON TABLE auth.mfa_amr_claims TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.mfa_amr_claims TO dashboard_user;
 
 
@@ -4865,8 +4865,8 @@ GRANT ALL ON TABLE auth.mfa_amr_claims TO dashboard_user;
 -- Name: TABLE mfa_challenges; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.mfa_challenges TO your_rds_admin;
-GRANT SELECT ON TABLE auth.mfa_challenges TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.mfa_challenges TO supabase_admin;
+GRANT SELECT ON TABLE auth.mfa_challenges TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.mfa_challenges TO dashboard_user;
 
 
@@ -4874,8 +4874,8 @@ GRANT ALL ON TABLE auth.mfa_challenges TO dashboard_user;
 -- Name: TABLE mfa_factors; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.mfa_factors TO your_rds_admin;
-GRANT SELECT ON TABLE auth.mfa_factors TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.mfa_factors TO supabase_admin;
+GRANT SELECT ON TABLE auth.mfa_factors TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.mfa_factors TO dashboard_user;
 
 
@@ -4883,8 +4883,8 @@ GRANT ALL ON TABLE auth.mfa_factors TO dashboard_user;
 -- Name: TABLE one_time_tokens; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.one_time_tokens TO your_rds_admin;
-GRANT SELECT ON TABLE auth.one_time_tokens TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.one_time_tokens TO supabase_admin;
+GRANT SELECT ON TABLE auth.one_time_tokens TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.one_time_tokens TO dashboard_user;
 
 
@@ -4893,8 +4893,8 @@ GRANT ALL ON TABLE auth.one_time_tokens TO dashboard_user;
 --
 
 GRANT ALL ON TABLE auth.refresh_tokens TO dashboard_user;
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.refresh_tokens TO your_rds_admin;
-GRANT SELECT ON TABLE auth.refresh_tokens TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.refresh_tokens TO supabase_admin;
+GRANT SELECT ON TABLE auth.refresh_tokens TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -4902,15 +4902,15 @@ GRANT SELECT ON TABLE auth.refresh_tokens TO your_rds_admin WITH GRANT OPTION;
 --
 
 GRANT ALL ON SEQUENCE auth.refresh_tokens_id_seq TO dashboard_user;
-GRANT ALL ON SEQUENCE auth.refresh_tokens_id_seq TO your_rds_admin;
+GRANT ALL ON SEQUENCE auth.refresh_tokens_id_seq TO supabase_admin;
 
 
 --
 -- Name: TABLE saml_providers; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.saml_providers TO your_rds_admin;
-GRANT SELECT ON TABLE auth.saml_providers TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.saml_providers TO supabase_admin;
+GRANT SELECT ON TABLE auth.saml_providers TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.saml_providers TO dashboard_user;
 
 
@@ -4918,8 +4918,8 @@ GRANT ALL ON TABLE auth.saml_providers TO dashboard_user;
 -- Name: TABLE saml_relay_states; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.saml_relay_states TO your_rds_admin;
-GRANT SELECT ON TABLE auth.saml_relay_states TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.saml_relay_states TO supabase_admin;
+GRANT SELECT ON TABLE auth.saml_relay_states TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.saml_relay_states TO dashboard_user;
 
 
@@ -4928,16 +4928,16 @@ GRANT ALL ON TABLE auth.saml_relay_states TO dashboard_user;
 --
 
 GRANT ALL ON TABLE auth.schema_migrations TO dashboard_user;
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.schema_migrations TO your_rds_admin;
-GRANT SELECT ON TABLE auth.schema_migrations TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.schema_migrations TO supabase_admin;
+GRANT SELECT ON TABLE auth.schema_migrations TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: TABLE sessions; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.sessions TO your_rds_admin;
-GRANT SELECT ON TABLE auth.sessions TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.sessions TO supabase_admin;
+GRANT SELECT ON TABLE auth.sessions TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.sessions TO dashboard_user;
 
 
@@ -4945,8 +4945,8 @@ GRANT ALL ON TABLE auth.sessions TO dashboard_user;
 -- Name: TABLE sso_domains; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.sso_domains TO your_rds_admin;
-GRANT SELECT ON TABLE auth.sso_domains TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.sso_domains TO supabase_admin;
+GRANT SELECT ON TABLE auth.sso_domains TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.sso_domains TO dashboard_user;
 
 
@@ -4954,8 +4954,8 @@ GRANT ALL ON TABLE auth.sso_domains TO dashboard_user;
 -- Name: TABLE sso_providers; Type: ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.sso_providers TO your_rds_admin;
-GRANT SELECT ON TABLE auth.sso_providers TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.sso_providers TO supabase_admin;
+GRANT SELECT ON TABLE auth.sso_providers TO supabase_admin WITH GRANT OPTION;
 GRANT ALL ON TABLE auth.sso_providers TO dashboard_user;
 
 
@@ -4964,22 +4964,22 @@ GRANT ALL ON TABLE auth.sso_providers TO dashboard_user;
 --
 
 GRANT ALL ON TABLE auth.users TO dashboard_user;
-GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.users TO your_rds_admin;
-GRANT SELECT ON TABLE auth.users TO your_rds_admin WITH GRANT OPTION;
+GRANT INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE auth.users TO supabase_admin;
+GRANT SELECT ON TABLE auth.users TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: TABLE pg_stat_statements; Type: ACL; Schema: extensions; Owner: supabase_admin
 --
 
-GRANT ALL ON TABLE extensions.pg_stat_statements TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON TABLE extensions.pg_stat_statements TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: TABLE pg_stat_statements_info; Type: ACL; Schema: extensions; Owner: supabase_admin
 --
 
-GRANT ALL ON TABLE extensions.pg_stat_statements_info TO your_rds_admin WITH GRANT OPTION;
+GRANT ALL ON TABLE extensions.pg_stat_statements_info TO supabase_admin WITH GRANT OPTION;
 
 
 --
@@ -5007,7 +5007,7 @@ GRANT ALL ON TABLE pgsodium.mask_columns TO pgsodium_keyholder;
 -- Name: TABLE messages; Type: ACL; Schema: realtime; Owner: supabase_realtime_admin
 --
 
-GRANT ALL ON TABLE realtime.messages TO your_rds_admin;
+GRANT ALL ON TABLE realtime.messages TO supabase_admin;
 GRANT ALL ON TABLE realtime.messages TO dashboard_user;
 GRANT SELECT,INSERT,UPDATE ON TABLE realtime.messages TO anon;
 GRANT SELECT,INSERT,UPDATE ON TABLE realtime.messages TO authenticated;
@@ -5018,7 +5018,7 @@ GRANT SELECT,INSERT,UPDATE ON TABLE realtime.messages TO service_role;
 -- Name: TABLE schema_migrations; Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON TABLE realtime.schema_migrations TO your_rds_admin;
+GRANT ALL ON TABLE realtime.schema_migrations TO supabase_admin;
 GRANT ALL ON TABLE realtime.schema_migrations TO dashboard_user;
 GRANT SELECT ON TABLE realtime.schema_migrations TO anon;
 GRANT SELECT ON TABLE realtime.schema_migrations TO authenticated;
@@ -5030,7 +5030,7 @@ GRANT ALL ON TABLE realtime.schema_migrations TO supabase_realtime_admin;
 -- Name: TABLE subscription; Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON TABLE realtime.subscription TO your_rds_admin;
+GRANT ALL ON TABLE realtime.subscription TO supabase_admin;
 GRANT ALL ON TABLE realtime.subscription TO dashboard_user;
 GRANT SELECT ON TABLE realtime.subscription TO anon;
 GRANT SELECT ON TABLE realtime.subscription TO authenticated;
@@ -5042,7 +5042,7 @@ GRANT ALL ON TABLE realtime.subscription TO supabase_realtime_admin;
 -- Name: SEQUENCE subscription_id_seq; Type: ACL; Schema: realtime; Owner: supabase_admin
 --
 
-GRANT ALL ON SEQUENCE realtime.subscription_id_seq TO your_rds_admin;
+GRANT ALL ON SEQUENCE realtime.subscription_id_seq TO supabase_admin;
 GRANT ALL ON SEQUENCE realtime.subscription_id_seq TO dashboard_user;
 GRANT USAGE ON SEQUENCE realtime.subscription_id_seq TO anon;
 GRANT USAGE ON SEQUENCE realtime.subscription_id_seq TO authenticated;
@@ -5057,7 +5057,7 @@ GRANT ALL ON SEQUENCE realtime.subscription_id_seq TO supabase_realtime_admin;
 GRANT ALL ON TABLE storage.buckets TO anon;
 GRANT ALL ON TABLE storage.buckets TO authenticated;
 GRANT ALL ON TABLE storage.buckets TO service_role;
-GRANT ALL ON TABLE storage.buckets TO your_rds_admin;
+GRANT ALL ON TABLE storage.buckets TO supabase_admin;
 
 
 --
@@ -5067,7 +5067,7 @@ GRANT ALL ON TABLE storage.buckets TO your_rds_admin;
 GRANT ALL ON TABLE storage.migrations TO anon;
 GRANT ALL ON TABLE storage.migrations TO authenticated;
 GRANT ALL ON TABLE storage.migrations TO service_role;
-GRANT ALL ON TABLE storage.migrations TO your_rds_admin;
+GRANT ALL ON TABLE storage.migrations TO supabase_admin;
 
 
 --
@@ -5077,7 +5077,7 @@ GRANT ALL ON TABLE storage.migrations TO your_rds_admin;
 GRANT ALL ON TABLE storage.objects TO anon;
 GRANT ALL ON TABLE storage.objects TO authenticated;
 GRANT ALL ON TABLE storage.objects TO service_role;
-GRANT ALL ON TABLE storage.objects TO your_rds_admin;
+GRANT ALL ON TABLE storage.objects TO supabase_admin;
 
 
 --
@@ -5138,7 +5138,7 @@ GRANT ALL ON TABLE supabase_functions.migrations TO service_role;
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON SEQUENCES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON SEQUENCES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON SEQUENCES  TO dashboard_user;
 
 
@@ -5146,7 +5146,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL O
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON FUNCTIONS  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON FUNCTIONS  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON FUNCTIONS  TO dashboard_user;
 
 
@@ -5154,7 +5154,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL O
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: auth; Owner: supabase_auth_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON TABLES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON TABLES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL ON TABLES  TO dashboard_user;
 
 
@@ -5162,28 +5162,28 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_auth_admin IN SCHEMA auth GRANT ALL O
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: extensions; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA extensions GRANT ALL ON SEQUENCES  TO your_rds_admin WITH GRANT OPTION;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA extensions GRANT ALL ON SEQUENCES  TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: extensions; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA extensions GRANT ALL ON FUNCTIONS  TO your_rds_admin WITH GRANT OPTION;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA extensions GRANT ALL ON FUNCTIONS  TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: extensions; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA extensions GRANT ALL ON TABLES  TO your_rds_admin WITH GRANT OPTION;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA extensions GRANT ALL ON TABLES  TO supabase_admin WITH GRANT OPTION;
 
 
 --
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: graphql; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON SEQUENCES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON SEQUENCES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON SEQUENCES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON SEQUENCES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON SEQUENCES  TO service_role;
@@ -5193,7 +5193,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON 
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: graphql; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON FUNCTIONS  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON FUNCTIONS  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON FUNCTIONS  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON FUNCTIONS  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON FUNCTIONS  TO service_role;
@@ -5203,7 +5203,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON 
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: graphql; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON TABLES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON TABLES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON TABLES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON TABLES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON TABLES  TO service_role;
@@ -5213,7 +5213,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql GRANT ALL ON 
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: graphql_public; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON SEQUENCES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON SEQUENCES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON SEQUENCES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON SEQUENCES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON SEQUENCES  TO service_role;
@@ -5223,7 +5223,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT 
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: graphql_public; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON FUNCTIONS  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON FUNCTIONS  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON FUNCTIONS  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON FUNCTIONS  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON FUNCTIONS  TO service_role;
@@ -5233,7 +5233,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT 
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: graphql_public; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON TABLES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON TABLES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON TABLES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON TABLES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA graphql_public GRANT ALL ON TABLES  TO service_role;
@@ -5278,7 +5278,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA pgsodium_masks GRANT 
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: public; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENCES  TO service_role;
@@ -5288,7 +5288,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON SEQUENC
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: public; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON SEQUENCES  TO service_role;
@@ -5298,7 +5298,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON S
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: public; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIONS  TO service_role;
@@ -5308,7 +5308,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON FUNCTIO
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: public; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON FUNCTIONS  TO service_role;
@@ -5318,7 +5318,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON F
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES  TO service_role;
@@ -5328,7 +5328,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES 
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON TABLES  TO service_role;
@@ -5338,7 +5338,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public GRANT ALL ON T
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: realtime; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON SEQUENCES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON SEQUENCES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON SEQUENCES  TO dashboard_user;
 
 
@@ -5346,7 +5346,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: realtime; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON FUNCTIONS  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON FUNCTIONS  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON FUNCTIONS  TO dashboard_user;
 
 
@@ -5354,7 +5354,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: realtime; Owner: supabase_admin
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON TABLES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON TABLES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON TABLES  TO dashboard_user;
 
 
@@ -5362,7 +5362,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA realtime GRANT ALL ON
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: storage; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON SEQUENCES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON SEQUENCES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON SEQUENCES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON SEQUENCES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON SEQUENCES  TO service_role;
@@ -5372,7 +5372,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON SEQUEN
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: storage; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON FUNCTIONS  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON FUNCTIONS  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON FUNCTIONS  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON FUNCTIONS  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON FUNCTIONS  TO service_role;
@@ -5382,7 +5382,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON FUNCTI
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: storage; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON TABLES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON TABLES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON TABLES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON TABLES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON TABLES  TO service_role;
@@ -5392,7 +5392,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA storage GRANT ALL ON TABLES
 -- Name: DEFAULT PRIVILEGES FOR SEQUENCES; Type: DEFAULT ACL; Schema: supabase_functions; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON SEQUENCES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON SEQUENCES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON SEQUENCES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON SEQUENCES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON SEQUENCES  TO service_role;
@@ -5402,7 +5402,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT AL
 -- Name: DEFAULT PRIVILEGES FOR FUNCTIONS; Type: DEFAULT ACL; Schema: supabase_functions; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON FUNCTIONS  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON FUNCTIONS  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON FUNCTIONS  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON FUNCTIONS  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON FUNCTIONS  TO service_role;
@@ -5412,7 +5412,7 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT AL
 -- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: supabase_functions; Owner: postgres
 --
 
-ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON TABLES  TO your_rds_admin;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON TABLES  TO supabase_admin;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON TABLES  TO anon;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON TABLES  TO authenticated;
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA supabase_functions GRANT ALL ON TABLES  TO service_role;
@@ -5460,7 +5460,7 @@ CREATE EVENT TRIGGER issue_pg_net_access ON ddl_command_end
    EXECUTE FUNCTION extensions.grant_pg_net_access();
 
 
-ALTER EVENT TRIGGER issue_pg_net_access OWNER TO your_rds_admin;
+ALTER EVENT TRIGGER issue_pg_net_access OWNER TO supabase_admin;
 
 --
 -- Name: pgrst_ddl_watch; Type: EVENT TRIGGER; Schema: -; Owner: supabase_admin
