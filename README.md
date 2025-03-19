@@ -10,6 +10,12 @@ PLEASE perform a snapshot - and instead of running format_db (breaks stuff) do a
 
 
 
+BOOT UP fresh rds with supabase_admin as the rds superuser account. 
+it should resolve some hard to find permission problems in realtime.
+
+
+
+
 use the rds_snapshot_manager.sh to create a clean restore point to roll back 
 ```shell
 aws iam put-role-policy \
